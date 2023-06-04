@@ -40,6 +40,16 @@ function App() {
 
   /*web3.eth.getAccounts().then(console.log);*/
 
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    const accounts = await web3.eth.getAccounts();
+
+    await lottery.methods.enter().send()({
+      from: accounts[0],
+      value: web3.utils.toWei(value, 'ether')
+    });
+  };
+
   return (
     <div>
       <h2>Lottery Contract</h2>
@@ -48,11 +58,11 @@ function App() {
         competing to win {web3.utils.fromWei(balance, 'ether')} ether!
       </p>
       <hr />
-      <form>
+      <form onSubmit={handleSubmit}>
         <h4>Want to try your luck?</h4>
         <div>
           <label>Amount of ether to enter</label>
-          <input value={value} onChange={e => setValue(e.target.value)} />
+          <input value={value} onChange={event => setValue(event.target.value)} />
         </div>
         <button>Enter</button>
       </form>

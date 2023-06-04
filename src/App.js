@@ -21,7 +21,10 @@ class App extends React.Component {
     /*web3.eth.getAccounts().then(console.log);*/
 
     return (
-      
+      <div>
+        <h2>Lottery Contract</h2>
+        <p>This contract is managed by {this.state.manager} </p>
+      </div>
     );
   }
 }

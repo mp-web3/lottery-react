@@ -15,13 +15,16 @@ class App extends React.Component {
  /* Refactor the constructor */
 
  state = {
-  manager: ''
+  manager: '',
+  players: [],
+  balance: ''
  };
 
   async componentDidMount() { /*automatically called whenever the app component is placed on the screen*/
     const manager = await lottery.methods.manager().call();
-
-    this.setState({ manager });
+    const players = await lottery.methods.players().call();
+    const balance = await web3.eth.getBalance(lottery.options.address);
+    this.setState({ manager, players });
   }
 
   render() {
@@ -30,7 +33,10 @@ class App extends React.Component {
     return (
       <div>
         <h2>Lottery Contract</h2>
-        <p>This contract is managed by {this.state.manager} </p>
+        <p>This contract is managed by {this.state.manager}.
+          There are currently {this.state.players.length} people entered,
+          competing to win {web3.utils.fromWei(this.state.balance, 'ether')} ether!
+        </p>
       </div>
     );
   }

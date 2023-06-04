@@ -9,6 +9,7 @@ function App() {
  const [ players, setPlayers ] = useState([]);
  const [ balance, setBalance ] = useState('');
  const [ value, setValue ] = useState('');
+ const [ message, setMessage ] = useState('');
 
  useEffect(() => {
   const fetchData = async () => {
@@ -44,9 +45,21 @@ function App() {
     event.preventDefault();
     const accounts = await web3.eth.getAccounts();
 
-    await lottery.methods.enter().send()({
+    setMessage('Wainting on transaction outcome...');
+
+    await lottery.methods.enter().send({
       from: accounts[0],
       value: web3.utils.toWei(value, 'ether')
+    })
+    .on('transactionHash', (hash) => {
+      setMessage('Transaction sent. Waiting for confirmation...');
+    })
+    .on('confirmation', (confirmationNumber, receipt) => {
+      setMessage('Transaction confirmed!');
+    })
+    .on('error', (error) => {
+      setMessage('Error occurred during transaction!');
+      console.error(error);
     });
   };
 
@@ -66,6 +79,11 @@ function App() {
         </div>
         <button>Enter</button>
       </form>
+
+      <hr/>
+
+      <h1>{message}</h1>
+
     </div>
   );
   

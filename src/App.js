@@ -45,7 +45,7 @@ function App() {
     event.preventDefault();
     const accounts = await web3.eth.getAccounts();
 
-    setMessage('Wainting on transaction outcome...');
+    setMessage('Waiting on transaction outcome...');
 
     await lottery.methods.enter().send({
       from: accounts[0],
@@ -61,6 +61,20 @@ function App() {
       setMessage('Error occurred during transaction!');
       console.error(error);
     });
+  };
+
+  const onClickPickWinner = async (event) => {
+    event.preventDefault();
+    const accounts = await web3.eth.getAccounts();
+
+    setMessage('Picking a winner...');
+
+    await lottery.methods.pickWinner().send({
+      from: accounts[0]
+    })
+
+    setMessage('A winner has been picked!')
+
   };
 
   return (
@@ -79,6 +93,10 @@ function App() {
         </div>
         <button>Enter</button>
       </form>
+
+      <hr/>
+      <h4>Ready to pick a winner?</h4>
+      <button onClick={onClickPickWinner}>Pick a winner!</button>
 
       <hr/>
 

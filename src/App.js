@@ -1,5 +1,3 @@
-import logo from "./logo.svg";
-import "./App.css";
 import React from "react";
 import web3 from './web3';
 import lottery from './lottery.js'
@@ -22,9 +20,9 @@ class App extends React.Component {
 
   async componentDidMount() { /*automatically called whenever the app component is placed on the screen*/
     const manager = await lottery.methods.manager().call();
-    const players = await lottery.methods.players().call();
+    const players = await lottery.methods.getPlayers().call();
     const balance = await web3.eth.getBalance(lottery.options.address);
-    this.setState({ manager, players });
+    this.setState({ manager, players, balance });
   }
 
   render() {
